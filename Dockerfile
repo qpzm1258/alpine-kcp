@@ -64,8 +64,6 @@ RUN apk upgrade --update \
     && apk add --no-cache --virtual .run-deps $runDeps \
     && apk del .build-deps \
     && rm -rf kcptun-linux-amd64-$KCP_VERSION.tar.gz \
-        shadowsocks-libev-$SS_LIBEV_VERSION.tar.gz \
-        shadowsocks-libev-$SS_LIBEV_VERSION \
         udp2raw_binaries.tar.gz \
         /var/cache/apk/*
 
