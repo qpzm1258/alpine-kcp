@@ -6,8 +6,8 @@ ARG TZ="Asia/Shanghai"
 
 ENV TZ ${TZ}
 ENV SS_LIBEV_VERSION 3.1.3
-ENV KCP_VERSION 20171201 
-ENV RAW_VERSION 20180220.1
+ENV KCP_VERSION 20181230 
+ENV RAW_VERSION 20181113.0
 
 
 RUN apk upgrade --update \
@@ -44,11 +44,6 @@ RUN apk upgrade --update \
         udns-dev \
         tar \
         git \
-    && curl -sSLO https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$SS_LIBEV_VERSION/shadowsocks-libev-$SS_LIBEV_VERSION.tar.gz \
-    && tar -zxf shadowsocks-libev-$SS_LIBEV_VERSION.tar.gz \
-    && (cd shadowsocks-libev-$SS_LIBEV_VERSION \
-    && ./configure --prefix=/usr --disable-documentation \
-    && make install ) \
     && curl -sSLO https://github.com/xtaci/kcptun/releases/download/v$KCP_VERSION/kcptun-linux-amd64-$KCP_VERSION.tar.gz \
     && tar -zxf kcptun-linux-amd64-$KCP_VERSION.tar.gz \
     && mv server_linux_amd64 /usr/bin/kcpserver \
