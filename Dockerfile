@@ -8,6 +8,8 @@ ENV TZ ${TZ}
 ENV SS_LIBEV_VERSION 3.1.3
 ENV KCP_VERSION 20181230 
 ENV RAW_VERSION 20181113.0
+ENV SERVER_IP 127.0.0.1
+ENV UDP2RAW_SERVER_PORT 26817
 
 
 RUN apk upgrade --update \
@@ -73,5 +75,5 @@ ADD entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 
-EXPOSE 22 
+EXPOSE 8964
 ENTRYPOINT ["/entrypoint.sh"]    
