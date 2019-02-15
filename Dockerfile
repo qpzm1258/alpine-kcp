@@ -20,9 +20,6 @@ RUN apk upgrade --update \
     && ssh-keygen -t dsa -f /etc/ssh/ssh_host_ed25519_key -N '' \
     && echo "root:root" | chpasswd \
     && rm -rf /var/cache/apk/*
-    
-RUN kcp_ver=`wget -SO - https://github.com/xtaci/kcptun/releases/latest 2>&1 | grep -m1 -o '[0-9]\{8\}.tar.gz'`
-RUN latest_kcp_ver=${kcp_ver%.tar.gz*} && echo ${latest_kcp_ver}
 
 RUN apk upgrade --update \
     && apk add bash tzdata libsodium iptables net-tools \
@@ -49,6 +46,8 @@ RUN apk upgrade --update \
     && (cd shadowsocks-libev-$SS_LIBEV_VERSION \
     && ./configure --prefix=/usr --disable-documentation \
     && make install ) \
+    && kcp_ver=`wget -SO - https://github.com/xtaci/kcptun/releases/latest 2>&1 | grep -m1 -o '[0-9]\{8\}.tar.gz'` \
+    && latest_kcp_ver=${kcp_ver%.tar.gz*} && echo ${latest_kcp_ver}
     && curl -sSLO https://github.com/xtaci/kcptun/releases/download/v$latest_kcp_ver/kcptun-linux-amd64-$latest_kcp_ver.tar.gz  \
     && tar -zxf kcptun-linux-amd64-$latest_kcp_ver.tar.gz \
     && mv server_linux_amd64 /usr/bin/kcpserver \
