@@ -22,7 +22,7 @@ RUN apk upgrade --update \
     && rm -rf /var/cache/apk/*
     
 RUN kcp_ver=`wget -SO - https://github.com/xtaci/kcptun/releases/latest 2>&1 | grep -m1 -o '[0-9]\{8\}.tar.gz'`
-RUN latest_kcp_ver=${kcp_ver%.tar.gz*}
+RUN latest_kcp_ver=${kcp_ver%.tar.gz*} && echo ${latest_kcp_ver}
 
 RUN apk upgrade --update \
     && apk add bash tzdata libsodium iptables net-tools \
