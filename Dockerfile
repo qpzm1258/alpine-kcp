@@ -6,12 +6,11 @@ ARG TZ="Asia/Shanghai"
 
 ENV TZ ${TZ}
 ENV SS_LIBEV_VERSION 3.2.3
-ENV KCP_VERSION 20190109 
 ENV RAW_VERSION 20180220.1
 
 
 RUN apk upgrade --update \
-    && apk add bash tzdata openssh nano \
+    && apk add bash tzdata openssh nano wget \
     && ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime \
     && echo ${TZ} > /etc/timezone \
     && sed -i s/#PermitRootLogin.*/PermitRootLogin\ yes/ /etc/ssh/sshd_config \
@@ -22,7 +21,8 @@ RUN apk upgrade --update \
     && echo "root:root" | chpasswd \
     && rm -rf /var/cache/apk/*
     
-
+RUN kcp_ver=`wget -SO - https://github.com/xtaci/kcptun/releases/latest 2>&1 | grep -m1 -o '[0-9]\{8\}.tar.gz'`
+RUN latest_kcp_ver=${kcp_ver%.tar.gz*}
 
 RUN apk upgrade --update \
     && apk add bash tzdata libsodium iptables net-tools \
@@ -49,8 +49,8 @@ RUN apk upgrade --update \
     && (cd shadowsocks-libev-$SS_LIBEV_VERSION \
     && ./configure --prefix=/usr --disable-documentation \
     && make install ) \
-    && curl -sSLO https://github.com/xtaci/kcptun/releases/download/v$KCP_VERSION/kcptun-linux-amd64-$KCP_VERSION.tar.gz \
-    && tar -zxf kcptun-linux-amd64-$KCP_VERSION.tar.gz \
+    && curl -sSLO https://github.com/xtaci/kcptun/releases/download/v$latest_kcp_ver/kcptun-linux-amd64-$latest_kcp_ver.tar.gz  \
+    && tar -zxf kcptun-linux-amd64-$latest_kcp_ver.tar.gz \
     && mv server_linux_amd64 /usr/bin/kcpserver \
     && mv client_linux_amd64 /usr/bin/kcpclient \
     && curl -sSLO https://github.com/wangyu-/udp2raw-tunnel/releases/download/$RAW_VERSION/udp2raw_binaries.tar.gz \
@@ -66,7 +66,7 @@ RUN apk upgrade --update \
         )" \
     && apk add --no-cache --virtual .run-deps $runDeps \
     && apk del .build-deps \
-    && rm -rf kcptun-linux-amd64-$KCP_VERSION.tar.gz \
+    && rm -rf kcptun-linux-amd64-$latest_kcp_ver.tar.gz \
         shadowsocks-libev-$SS_LIBEV_VERSION.tar.gz \
         shadowsocks-libev-$SS_LIBEV_VERSION \
         udp2raw_binaries.tar.gz \
