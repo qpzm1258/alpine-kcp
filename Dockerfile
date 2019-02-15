@@ -47,7 +47,7 @@ RUN apk upgrade --update \
     && ./configure --prefix=/usr --disable-documentation \
     && make install ) \
     && kcp_ver=`wget -SO - https://github.com/xtaci/kcptun/releases/latest 2>&1 | grep -m1 -o '[0-9]\{8\}.tar.gz'` \
-    && latest_kcp_ver=${kcp_ver%.tar.gz*} && echo ${latest_kcp_ver}
+    && latest_kcp_ver=${kcp_ver%.tar.gz*} && echo ${latest_kcp_ver} \
     && curl -sSLO https://github.com/xtaci/kcptun/releases/download/v$latest_kcp_ver/kcptun-linux-amd64-$latest_kcp_ver.tar.gz  \
     && tar -zxf kcptun-linux-amd64-$latest_kcp_ver.tar.gz \
     && mv server_linux_amd64 /usr/bin/kcpserver \
