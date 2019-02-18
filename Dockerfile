@@ -9,7 +9,7 @@ ENV SS_LIBEV_VERSION 3.2.3
 ENV KCP_VERSION 20190109 
 ENV RAW_VERSION 20181113.0
 ENV SERVER_IP 127.0.0.1
-ENV UDP2RAW_SERVER_PORT 26817
+ENV KCP_SERVER_PORT 26817
 
 
 RUN apk upgrade --update \
@@ -46,8 +46,10 @@ RUN apk upgrade --update \
         udns-dev \
         tar \
         git \
-    && curl -sSLO https://github.com/xtaci/kcptun/releases/download/v$KCP_VERSION/kcptun-linux-amd64-$KCP_VERSION.tar.gz \
-    && tar -zxf kcptun-linux-amd64-$KCP_VERSION.tar.gz \
+    && kcp_ver=`wget -SO - https://github.com/xtaci/kcptun/releases/latest 2>&1 | grep -m1 -o '[0-9]\{8\}.tar.gz'` \
+    && latest_kcp_ver=${kcp_ver%.tar.gz*} && echo ${latest_kcp_ver} \
+    && curl -sSLO https://github.com/xtaci/kcptun/releases/download/v$latest_kcp_ver/kcptun-linux-amd64-$latest_kcp_ver.tar.gz  \
+    && tar -zxf kcptun-linux-amd64-$latest_kcp_ver.tar.gz \
     && mv server_linux_amd64 /usr/bin/kcpserver \
     && mv client_linux_amd64 /usr/bin/kcpclient \
     && curl -sSLO https://github.com/wangyu-/udp2raw-tunnel/releases/download/$RAW_VERSION/udp2raw_binaries.tar.gz \
