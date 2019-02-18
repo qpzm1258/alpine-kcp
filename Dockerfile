@@ -5,9 +5,6 @@ LABEL maintainer="mritd <mritd1234@gmail.com>"
 ARG TZ="Asia/Shanghai"
 
 ENV TZ ${TZ}
-ENV SS_LIBEV_VERSION 3.2.3
-ENV KCP_VERSION 20190109 
-ENV RAW_VERSION 20181113.0
 ENV SERVER_IP 127.0.0.1
 ENV KCP_SERVER_PORT 26817
 
@@ -28,22 +25,7 @@ RUN apk upgrade --update \
 
 RUN apk upgrade --update \
     && apk add bash tzdata libsodium iptables net-tools \
-    && apk add --virtual .build-deps \
-        autoconf \
-        automake \
-        asciidoc \
-        xmlto \
-        build-base \
-        curl \
-        libev-dev \
-        libtool \
-        c-ares-dev \
-        linux-headers \
-        udns-dev \
-        libsodium-dev \
-        mbedtls-dev \
-        pcre-dev \
-        udns-dev \
+    && apk add --virtual curl \
         tar \
         git \
     && kcp_ver=`wget -SO - https://github.com/xtaci/kcptun/releases/latest 2>&1 | grep -m1 -o '[0-9]\{8\}.tar.gz'` \
@@ -52,21 +34,9 @@ RUN apk upgrade --update \
     && tar -zxf kcptun-linux-amd64-$latest_kcp_ver.tar.gz \
     && mv server_linux_amd64 /usr/bin/kcpserver \
     && mv client_linux_amd64 /usr/bin/kcpclient \
-    && curl -sSLO https://github.com/wangyu-/udp2raw-tunnel/releases/download/$RAW_VERSION/udp2raw_binaries.tar.gz \
-    && tar -zxf udp2raw_binaries.tar.gz \
-    && mv udp2raw_amd64 /usr/bin/udpraw \
     && ln -sf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone \
-    && runDeps="$( \
-        scanelf --needed --nobanner /usr/bin/ss-* \
-            | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
-            | xargs -r apk info --installed \
-            | sort -u \
-        )" \
-    && apk add --no-cache --virtual .run-deps $runDeps \
-    && apk del .build-deps \
     && rm -rf kcptun-linux-amd64-$KCP_VERSION.tar.gz \
-        udp2raw_binaries.tar.gz \
         /var/cache/apk/*
 
 ADD kcp.sh /root/kcp.sh   
