@@ -72,10 +72,9 @@ RUN apk upgrade --update \
         /var/cache/apk/*
 
 ADD kcp.sh /root/kcp.sh   
-RUN chmod +x /root/kcp.sh
+RUN chmod a+x /root/kcp.sh
 ADD entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+RUN chmod a+x /entrypoint.sh
 
 
-EXPOSE 22 
 ENTRYPOINT ["/entrypoint.sh"]    
