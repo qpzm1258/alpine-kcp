@@ -7,8 +7,8 @@ ARG TZ="Asia/Shanghai"
 ENV TZ ${TZ}
 ENV SS_LIBEV_VERSION 3.2.3
 ENV RAW_VERSION 20180220.1
-ENV SRC_IP
-ENV SRC_PORT
+ENV SRC_IP 127.0.0.1
+ENV SRC_PORT 8989
 
 RUN apk upgrade --update \
     && apk add bash tzdata openssh nano wget \
