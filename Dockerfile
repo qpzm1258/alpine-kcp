@@ -7,7 +7,8 @@ ARG TZ="Asia/Shanghai"
 ENV TZ ${TZ}
 ENV SS_LIBEV_VERSION 3.2.3
 ENV RAW_VERSION 20180220.1
-
+ENV SRC_IP
+ENV SRC_PORT
 
 RUN apk upgrade --update \
     && apk add bash tzdata openssh nano wget \
@@ -41,11 +42,6 @@ RUN apk upgrade --update \
         udns-dev \
         tar \
         git \
-    && curl -sSLO https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$SS_LIBEV_VERSION/shadowsocks-libev-$SS_LIBEV_VERSION.tar.gz \
-    && tar -zxf shadowsocks-libev-$SS_LIBEV_VERSION.tar.gz \
-    && (cd shadowsocks-libev-$SS_LIBEV_VERSION \
-    && ./configure --prefix=/usr --disable-documentation \
-    && make install ) \
     && kcp_ver=`wget -SO - https://github.com/xtaci/kcptun/releases/latest 2>&1 | grep -m1 -o '[0-9]\{8\}.tar.gz'` \
     && latest_kcp_ver=${kcp_ver%.tar.gz*} && echo ${latest_kcp_ver} \
     && curl -sSLO https://github.com/xtaci/kcptun/releases/download/v$latest_kcp_ver/kcptun-linux-amd64-$latest_kcp_ver.tar.gz  \
@@ -66,8 +62,6 @@ RUN apk upgrade --update \
     && apk add --no-cache --virtual .run-deps $runDeps \
     && apk del .build-deps \
     && rm -rf kcptun-linux-amd64-$latest_kcp_ver.tar.gz \
-        shadowsocks-libev-$SS_LIBEV_VERSION.tar.gz \
-        shadowsocks-libev-$SS_LIBEV_VERSION \
         udp2raw_binaries.tar.gz \
         /var/cache/apk/*
 
