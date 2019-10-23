@@ -5,8 +5,8 @@ LABEL maintainer="mritd <mritd1234@gmail.com>"
 ARG TZ="Asia/Shanghai"
 
 ENV TZ ${TZ}
-ENV SS_LIBEV_VERSION 3.2.3
-ENV RAW_VERSION 20180220.1
+ENV SS_LIBEV_VERSION 3.3.2
+ENV RAW_VERSION 20181113.0
 
 
 RUN apk upgrade --update \
